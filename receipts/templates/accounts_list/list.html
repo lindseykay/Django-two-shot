@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <div>
+        <h1>Acccounts List</h1>
+        <table>
+            <thead>
+                <th>Account Name</th>
+                <th>Account Number</th>
+                <th>Number of Receipts</th>
+            </thead>
+            <tbody>
+                {% for account in account_list %}
+                <tr>
+                    <td>{{ account.name }}</td>
+                    <td>{{ account.number }}</td>
+                    <td>{{ account.receipts.all|length }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock content %}

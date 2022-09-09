@@ -3,7 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from receipts.models import Receipt
+from receipts.models import Receipt, ExpenseCategory, Account
 
 # Create your views here.
 
@@ -11,7 +11,7 @@ from receipts.models import Receipt
 class ReceiptListView(LoginRequiredMixin, ListView):
     model = Receipt
     template_name = "receipts/list.html"
-    # context_object_name="receipt"
+    # context_object_name="receipt_list"
 
     def get_queryset(self):
         return Receipt.objects.filter(purchaser=self.request.user)
@@ -27,3 +27,20 @@ class ReceiptCreateView(LoginRequiredMixin, CreateView):
         new_receipt.purchaser = self.request.user
         new_receipt.save()
         return redirect("home")
+
+
+class ExpenseCategoryListView(LoginRequiredMixin, ListView):
+    model = ExpenseCategory
+    template_name = "expenses_list/list.html"
+    # context_object_name = "expensecategory_list"
+
+    def get_queryset(self):
+        return ExpenseCategory.objects.filter(owner=self.request.user)
+
+
+class AccountListView(LoginRequiredMixin, ListView):
+    model = Account
+    template_name = "accounts_list/list.html"
+
+    def get_queryset(self):
+        return Account.objects.filter(owner=self.request.user)
