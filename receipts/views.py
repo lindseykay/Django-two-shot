@@ -56,3 +56,15 @@ class AccountListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Account.objects.filter(owner=self.request.user)
+
+
+class AccountCreateView(LoginRequiredMixin, CreateView):
+    model = Account
+    template_name = "accounts/new.html"
+    fields = ["name", "number"]
+
+    def form_valid(self, form):
+        new_account = form.save(commit=False)
+        new_account.owner = self.request.user
+        new_account.save()
+        return redirect("list_accounts")
