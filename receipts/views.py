@@ -31,16 +31,28 @@ class ReceiptCreateView(LoginRequiredMixin, CreateView):
 
 class ExpenseCategoryListView(LoginRequiredMixin, ListView):
     model = ExpenseCategory
-    template_name = "expenses_list/list.html"
+    template_name = "expenses/list.html"
     # context_object_name = "expensecategory_list"
 
     def get_queryset(self):
         return ExpenseCategory.objects.filter(owner=self.request.user)
 
 
+class ExpenseCategoryCreateView(LoginRequiredMixin, CreateView):
+    model = ExpenseCategory
+    template_name = "expenses/new.html"
+    fields = ["name"]
+
+    def form_valid(self, form):
+        new_category = form.save(commit=False)
+        new_category.owner = self.request.user
+        new_category.save()
+        return redirect("list_categories")
+
+
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
-    template_name = "accounts_list/list.html"
+    template_name = "accounts/list.html"
 
     def get_queryset(self):
         return Account.objects.filter(owner=self.request.user)
